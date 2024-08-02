@@ -1,10 +1,7 @@
 parameters:
-    token: '%env(JWT_SECRET)%'
+    token_secret: '%env(JWT_SECRET)%'
 
 services:
-    App\Service\JwtManager:
-        arguments:
-            $secret: '%token%'
     _defaults:
         autowire: true
         autoconfigure: true

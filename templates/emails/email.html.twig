@@ -1,0 +1,6 @@
+<h1>Activation de votre compte sur WORSKSHOP-MANAGER</h1><br><br>
+
+<p>Bonjour {{ user.userName }}</p>
+<p>Pour activez votre compte sur worshop-manager cliquez sur le lien ci-dessous.</p>
+<p><a href="{{ absolute_url(path('app_verify', {token: token})) }}">Lien</a></p>
+<p>Toute l'équipe ws-manager vous remercie</p>

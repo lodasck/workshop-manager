@@ -14,7 +14,13 @@
     </head>
     <body>
         {% block header %}{% endblock %}
-        {% block body %}{% endblock %}
+        {% block body %}
+            {% for messages in app.flashes %}
+                {% for message in messages %}
+                    <p>{{ message |raw }}</p>
+                {% endfor %}
+            {% endfor %}
+        {% endblock %}
         {% block footer %}{% endblock %}
     </body>
 </html>
