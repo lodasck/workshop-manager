@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,8 +19,14 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\Column]
+    private ?int $stock = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
@@ -29,6 +37,17 @@ class Product
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
+
+    /**
+     * @var Collection<int, Movment>
+     */
+    #[ORM\OneToMany(targetEntity: Movment::class, mappedBy: 'product')]
+    private Collection $movments;
+
+    public function __construct()
+    {
+        $this->movments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -47,6 +66,18 @@ class Product
         return $this;
     }
 
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -55,6 +86,18 @@ class Product
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getStock(): ?int
+    {
+        return $this->stock;
+    }
+
+    public function setStock(int $stock): static
+    {
+        $this->stock = $stock;
 
         return $this;
     }
@@ -91,6 +134,36 @@ class Product
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Movment>
+     */
+    public function getMovments(): Collection
+    {
+        return $this->movments;
+    }
+
+    public function addMovment(Movment $movment): static
+    {
+        if (!$this->movments->contains($movment)) {
+            $this->movments->add($movment);
+            $movment->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMovment(Movment $movment): static
+    {
+        if ($this->movments->removeElement($movment)) {
+            // set the owning side to null (unless already changed)
+            if ($movment->getProduct() === $this) {
+                $movment->setProduct(null);
+            }
+        }
 
         return $this;
     }
