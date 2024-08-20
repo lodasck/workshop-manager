@@ -47,28 +47,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private \DateTimeImmutable $updatedAt;
 
-    /**
-     * @var Collection<int, Place>
-     */
-    #[ORM\OneToMany(targetEntity: Place::class, mappedBy: 'user')]
-    private Collection $places;
-
-    /**
-     * @var Collection<int, Tool>
-     */
-    #[ORM\OneToMany(targetEntity: Tool::class, mappedBy: 'user')]
-    private Collection $tools;
-
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?UserInfo $userInfo = null;
 
+    /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'user')]
+    private Collection $products;
+
     public function __construct()
     {
-        $this->places = new ArrayCollection();
-        $this->tools = new ArrayCollection();
-
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -194,66 +186,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Place>
-     */
-    public function getPlaces(): Collection
-    {
-        return $this->places;
-    }
-
-    public function addPlace(Place $place): static
-    {
-        if (!$this->places->contains($place)) {
-            $this->places->add($place);
-            $place->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlace(Place $place): static
-    {
-        if ($this->places->removeElement($place)) {
-            // set the owning side to null (unless already changed)
-            if ($place->getUser() === $this) {
-                $place->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Tool>
-     */
-    public function getTools(): Collection
-    {
-        return $this->tools;
-    }
-
-    public function addTool(Tool $tool): static
-    {
-        if (!$this->tools->contains($tool)) {
-            $this->tools->add($tool);
-            $tool->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTool(Tool $tool): static
-    {
-        if ($this->tools->removeElement($tool)) {
-            // set the owning side to null (unless already changed)
-            if ($tool->getUser() === $this) {
-                $tool->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getUserInfo(): ?UserInfo
     {
         return $this->userInfo;
@@ -268,6 +200,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         $this->userInfo = $userInfo;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getUser() === $this) {
+                $product->setUser(null);
+            }
+        }
         return $this;
     }
 }
