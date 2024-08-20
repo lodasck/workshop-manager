@@ -56,11 +56,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'user')]
     private Collection $products;
 
+    /**
+     * @var Collection<int, Movment>
+     */
+    #[ORM\OneToMany(targetEntity: Movment::class, mappedBy: 'user')]
+    private Collection $movments;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->products = new ArrayCollection();
+        $this->movments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -229,6 +236,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $product->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Movment>
+     */
+    public function getMovments(): Collection
+    {
+        return $this->movments;
+    }
+
+    public function addMovment(Movment $movment): static
+    {
+        if (!$this->movments->contains($movment)) {
+            $this->movments->add($movment);
+            $movment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMovment(Movment $movment): static
+    {
+        if ($this->movments->removeElement($movment)) {
+            // set the owning side to null (unless already changed)
+            if ($movment->getUser() === $this) {
+                $movment->setUser(null);
+            }
+        }
+
         return $this;
     }
 }
