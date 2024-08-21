@@ -3,39 +3,49 @@
 {% block title %}Me connecter{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <div class="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
+            <h1 class="text-2xl font-bold mb-6">Veuillez vous connecter</h1>
 
-    {% if app.user %}
-        <div class="mb-3">
-            Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            {% if error %}
+                <div class="alert alert-danger bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <span class="block sm:inline">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                </div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-4">
+                    Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-blue-600 hover:underline">Se déconnecter</a>
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-4">
+                <div>
+                    <label for="inputEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" autocomplete="email" required autofocus>
+                </div>
+
+                <div>
+                    <label for="inputPassword" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" autocomplete="current-password" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="flex items-center mb-4">
+                    <input type="checkbox" name="_remember_me" id="rememberMe" class="mr-2">
+                    <label for="rememberMe" class="text-sm text-gray-600">Se souvenir de moi !</label>
+                </div>
+
+                <button class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" type="submit">
+                    Se connecter
+                </button>
+
+                <p class="mt-4 text-sm text-gray-600">
+                    <a href="#" class="text-blue-600 hover:underline">Mot de passe oublié</a>
+                </p>
+                <p class="text-sm text-gray-600">Pas encore inscrit(e) ? <a href="{{ path('app_register') }}" class="text-blue-600 hover:underline">M'inscrire</a></p>
+            </form>
         </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Veuillez vous connecter</h1>
-    <div>
-        <label for="inputEmail">Email</label>
-        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
     </div>
-    <div>
-        <label for="inputPassword">Mot de passe</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    </div>
-
-    <input type="hidden" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Se souvenir de moi !
-        </label>
-    </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Se connecter
-    </button>
-    <p><a href="#"Mot de passe oublié</a></p>
-    <p>Pas encore inscrit(e) ? <a href="{{path('app_register')}}">M'inscrire</a></p>
-</form>
 {% endblock %}
