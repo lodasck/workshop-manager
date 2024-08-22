@@ -25,7 +25,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_dashboard');
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -97,7 +97,7 @@ class SecurityController extends AbstractController
                 $em->flush();
 
                 $this->addFlash('success', 'Votre compte est bien activé');
-                return $this->redirectToRoute('app_home');
+                return $this->redirectToRoute('app_dashboard');
             }
         }
         $this->addFlash('danger', 'Le token est invalide ou à expirer');
