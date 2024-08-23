@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Product{% endblock %}
+
+{% block body %}
+    <h1>Edit Product</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('product_index') }}">back to list</a>
+
+    <form method="post" action="{{ path('product_delete', {'id': product.id}) }}" style="display:inline;">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+    </form>
+{% endblock %}
