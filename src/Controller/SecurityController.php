@@ -5,10 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Service\JwtService;
 use App\Service\EmailService;
-use App\Form\ResetPasswordFormType;
-use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
-use App\Security\UserAuthenticator;
+use App\Form\RegistrationFormType;
+use App\Form\ResetPasswordFormType;
 use App\Form\ForgotPasswordFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -22,7 +21,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, UserRepository $userRepository): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_dashboard');
@@ -30,6 +29,14 @@ class SecurityController extends AbstractController
 
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
+
+        if ($lastUsername) {
+            $user = $userRepository->findOneBy(['email' => $lastUsername]);
+    
+            if ($user && !$user->isVerified()) {
+                $error = 'Votre compte n\'est pas encore vérifié. Veuillez vérifier votre email.';
+            }
+        }
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername, 
@@ -74,8 +81,9 @@ class SecurityController extends AbstractController
                 'email_verify', // $template
                 compact('user', 'token') // $context
             );
-
-            return $security->login($user, UserAuthenticator::class, 'main');
+            // return $security->login($user, UserAuthenticator::class, 'main');
+            $this->addFlash('success', 'Votre inscription est réussie ! Veuillez vérifier votre email pour activer votre compte.');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('security/registration.html.twig', [
@@ -96,8 +104,8 @@ class SecurityController extends AbstractController
                 $user->setVerified(true);
                 $em->flush();
 
-                $this->addFlash('success', 'Votre compte est bien activé');
-                return $this->redirectToRoute('app_dashboard');
+                $this->addFlash('success', 'Votre compte est bien activé, veuillez vous connecter');
+                return $this->redirectToRoute('app_login');
             }
         }
         $this->addFlash('danger', 'Le token est invalide ou à expirer');
