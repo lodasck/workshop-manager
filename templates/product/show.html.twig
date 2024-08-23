@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product{% endblock %}
+
+{% block body %}
+    <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10">
+        <div class="px-6 py-4">
+            <h1 class="text-2xl font-bold mb-4 text-gray-800">Product Details</h1>
+
+            <div class="mb-4">
+                <span class="block text-gray-600 font-semibold">Name: {{ product.name }}</span>
+            </div>
+
+            <div class="mb-4">
+                {% if product.image %}
+                    <img src="{{ asset('uploads/img_produits/' ~ product.image) }}" alt="{{ product.name }}" class="mt-2 max-w-full h-auto rounded">
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <span class="block text-gray-600 font-semibold">Description: {{ product.description }}</span>
+            </div>
+
+            <div class="mb-4">
+                <span class="block text-gray-600 font-semibold">Qté: {{ product.stock }}</span>
+            </div>
+
+            <div class="mb-4">
+                <span class="block text-gray-600 font-semibold">Ajouter le: {{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}</span>
+            </div>
+
+            <div class="mb-4">
+                <span class="block text-gray-600 font-semibold">Modifier le: {{ product.updatedAt ? product.updatedAt|date('Y-m-d H:i:s') : '' }}</span>
+            </div>
+
+            <div class="mt-6 flex justify-between">
+                <a href="{{ path('product_edit', {'id': product.id}) }}" class="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">Edit</a>
+
+                <form method="post" action="{{ path('product_delete', {'id': product.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                    <button class="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded" type="submit">Delete</button>
+                </form>
+            </div>
+            <a href="{{ path('product_index') }}" class="text-white bg-gray-500 hover:bg-gray-700 font-bold py-2 px-4 rounded">Back to list</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,5 +1,6 @@
 parameters:
     token_secret: '%env(JWT_SECRET)%'
+    images_directory: '%kernel.project_dir%/public/uploads/img_produits'
 
 services:
     _defaults:
