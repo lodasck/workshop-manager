@@ -1,26 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product Index{% endblock %}
+{% block title %}Liste des Produits{% endblock %}
 
 {% block body %}
-    <h1>Product List</h1>
+    <div class="min-h-screen bg-orange-300 p-4">
 
-    <div class="mt-6 flex justify-between">
-        <a href="{{ path('product_new') }}">Create new</a>
-    </div>
-        <tbody>
-            {% for product in products %}
-                <tr>
-                    <td>
-                        {{ product.name }}
-                        <button class="btn"><a href="{{ path('product_show', {'id': product.id}) }}">view</a></button>
-                        <button class="btn"><a href="{{ path('product_edit', {'id': product.id}) }}">edit</a></button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div class="mt-6 flex justify-between">
-        <a href="{{ path('app_dashboard') }}" class="text-white bg-gray-500 hover:bg-gray-700 font-bold py-2 px-4 rounded">Back to dashboard</a>
+        <div class="bg-yellow-100 shadow-md rounded-lg p-6 mb-4">
+            <h1 class="text-2xl font-bold mb-4 text-center text-gray-500">Liste des outils</h1>
+            <div class="flex justify-between items-center">
+                <a href="{{ path('product_new') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Ajouter un nouveau produit
+                </a>
+                <a href="{{ path('app_dashboard') }}" class="text-white bg-gray-400 hover:bg-gray-700 font-bold py-2 px-4 rounded">
+                    Retour au tableau de bord
+                </a>
+            </div>
+        </div>
+
+
+        <div class="bg-yellow-100 shadow-md rounded-lg p-6">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                    <tr>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nom du produit</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-gray-100 divide-y divide-gray-200">
+                    {% for product in products %}
+                        <tr>
+                            <td class="px-6 py-4 text-center whitespace-nowrap text-sm font-medium text-gray-900">{{ product.name }}</td>
+                            <td class="px-6 py-4 text-center whitespace-nowrap text-sm font-medium flex justify-center space-x-2">
+                                <a href="{{ path('product_show', {'id': product.id}) }}" class="text-blue-600 hover:text-blue-800">Voir</a>
+                                <a href="{{ path('product_edit', {'id': product.id}) }}" class="text-green-600 hover:text-green-800">Modifier</a>
+                                <form method="post" action="{{ path('product_delete', {'id': product.id}) }}" class="inline">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

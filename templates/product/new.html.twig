@@ -3,12 +3,35 @@
 {% block title %}New Product{% endblock %}
 
 {% block body %}
-    <h1>Create new Product</h1>
+    <div class="min-h-screen bg-orange-300 p-4 flex flex-col items-center justify-center">
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn">{{ button_label|default('Save') }}</button>
-    {{ form_end(form) }}
+        <div class="bg-yellow-100 shadow-md rounded-lg p-6 mb-4 w-full max-w-lg">
+            <h1 class="text-2xl font-bold mb-4 text-center text-gray-500">Créer un nouveau produit</h1>
+            <div class="mt-4 flex justify-center items-center">
+                <a href="{{ path('product_index') }}" class="text-white bg-gray-400 hover:bg-gray-700 font-bold py-2 px-4 rounded">
+                    Retour à la liste
+                </a>
+            </div>
+        </div>
 
-    <a href="{{ path('product_index') }}">back to list</a>
+        <div class="bg-yellow-100 shadow-md rounded-lg p-6 w-full max-w-lg">
+            {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+                <div class="space-y-4">
+                    {% for field in form %}
+                        <div class="flex flex-col">
+                            <label for="{{ field.vars.id }}" class="text-sm font-medium text-gray-700 mb-1">{{ field.vars.label }}</label>
+                            {{ form_widget(field, {'attr': {'class': 'bg-gray-100 divide-y divide-gray-200 border border-gray-300 rounded-md p-2'}}) }}
+                            {{ form_errors(field) }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="flex justify-center mt-4">
+                    <button class="bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        {{ button_label|default('Sauvegarder') }}
+                    </button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+
+    </div>
 {% endblock %}
