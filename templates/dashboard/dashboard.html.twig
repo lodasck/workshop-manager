@@ -1,20 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DashboardController!{% endblock %}
+{% block title %}Tableau de bord{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="flex flex-col h-screen" style="background-image: url('{{ asset('images/tableau_de_bord.jpg') }}'); background-size: cover; background-repeat: no-repeat;">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/raven/Dev/workshop-manager/src/Controller/DashboardController.php</code></li>
-        <li>Your template at <code>/home/raven/Dev/workshop-manager/templates/dashboard/index.html.twig</code></li>
-    </ul>
-</div>
+        <div class="flex-1 flex items-center justify-center p-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl">
+
+                <a href="{{ path('product_index') }}" class="bg-blue-300 p-4 rounded-lg shadow-md flex flex-col items-center justify-center block hover:bg-blue-200">
+                    <h2 class="text-xl font-semibold mb-2">Outils</h2>
+                    <p class="text-gray-700 text-center">Gestion des outils disponibles dans l'inventaire.</p>
+                </a>
+
+                <a href="#" class="bg-red-300 p-4 rounded-lg shadow-md flex flex-col items-center justify-center block hover:bg-red-200">
+                    <h2 class="text-xl font-semibold mb-2">Membres</h2>
+                    <p class="text-gray-700 text-center">Gestion des utilisateurs et de leurs droits d'accès.</p>
+                </a>
+
+                <a href="#" class="bg-green-300 p-4 rounded-lg shadow-md flex flex-col items-center justify-center block hover:bg-green-200">
+                    <h2 class="text-xl font-semibold mb-2">Notes</h2>
+                    <p class="text-gray-700 text-center">Espace de prise de notes, créer, conserver, recherche vos notes</p>
+                </a>
+
+                <a href="#" class="bg-yellow-300 p-4 rounded-lg shadow-md flex flex-col items-center justify-center block hover:bg-yellow-200">
+                    <h2 class="text-xl font-semibold mb-2">Rapports</h2>
+                    <p class="text-gray-700 text-center">Générez des rapports sur les ventes, les stocks, et plus encore.</p>
+                </a>
+
+                <a href="#" class="bg-purple-300 p-4 rounded-lg shadow-md flex flex-col items-center justify-center block hover:bg-purple-200">
+                    <h2 class="text-xl font-semibold mb-2">Paramètre</h2>
+                    <p class="text-gray-700 text-center">Paramètre des informations d'utilisateurs.</p>
+                </a>
+
+                <div class="flex items-center justify-center">
+                    <form action="{{ path('app_logout') }}" method="post">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-red-600 shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Déconnexion
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
